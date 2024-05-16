@@ -102,10 +102,8 @@ module.exports = (src, dest, preview) => async () => {
     ),
     vfs.src('helpers/*.js', opts),
     vfs.src('layouts/*.hbs', opts),
-    vfs.src('partials/*.hbs', opts)
-  )
-    .pipe(replace('{{git-sha}}', await gitRef()))
-    .pipe(vfs.dest(dest, { sourcemaps: sourcemaps && '.' }))
+    vfs.src('partials/*.hbs', opts).pipe(replace('{{git-sha}}', await gitRef()))
+  ).pipe(vfs.dest(dest, { sourcemaps: sourcemaps && '.' }))
 }
 
 function gitRef () {
