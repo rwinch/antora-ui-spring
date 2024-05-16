@@ -6,6 +6,7 @@ const concat = require('gulp-concat')
 const cssnano = require('cssnano')
 const fs = require('fs')
 const { promises: fsp } = fs
+const git = require('isomorphic-git')
 const imagemin = require('gulp-imagemin')
 const merge = require('merge-stream')
 const ospath = require('path')
@@ -17,11 +18,12 @@ const postcssUrl = require('postcss-url')
 const postcssVar = require('postcss-custom-properties')
 const { Transform } = require('stream')
 const map = (transform) => new Transform({ objectMode: true, transform })
+const replace = require('gulp-replace')
 const through = () => map((file, enc, next) => next(null, file))
 const uglify = require('gulp-uglify')
 const vfs = require('vinyl-fs')
 
-module.exports = (src, dest, preview) => () => {
+module.exports = (src, dest, preview) => async () => {
   const opts = { base: src, cwd: src }
   const sourcemaps = preview || process.env.SOURCEMAPS === 'true'
   const postcssPlugins = [
@@ -101,7 +103,13 @@ module.exports = (src, dest, preview) => () => {
     vfs.src('helpers/*.js', opts),
     vfs.src('layouts/*.hbs', opts),
     vfs.src('partials/*.hbs', opts)
-  ).pipe(vfs.dest(dest, { sourcemaps: sourcemaps && '.' }))
+  )
+    .pipe(replace('{{git-sha}}', await gitRef()))
+    .pipe(vfs.dest(dest, { sourcemaps: sourcemaps && '.' }))
+}
+
+function gitRef () {
+  return git.resolveRef({ fs, dir: '.', ref: 'HEAD' })
 }
 
 function bundle ({ base: basedir, ext: bundleExt = '.bundle.js' }) {

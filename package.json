@@ -45,11 +45,13 @@
     "gulp-eslint": "~6.0",
     "gulp-imagemin": "~6.2",
     "gulp-postcss": "~9.0",
+    "gulp-replace": "latest",
     "gulp-stylelint": "~13.0",
     "gulp-uglify": "~3.0",
     "gulp-vinyl-zip": "~2.5",
     "handlebars": "~4.7",
     "highlight.js": "9.18.3",
+    "isomorphic-git": "~1.25",
     "instantsearch.js": "^4.54.1",
     "js-yaml": "~4.1",
     "merge-stream": "~2.0",
@@ -69,6 +71,7 @@
   },
   "dependencies": {
     "@algolia/client-search": "^4.17.0",
-    "@primer/octicons": "^19.8.0"
+    "@primer/octicons": "^19.8.0",
+    "init": "^0.1.2"
   }
 }
